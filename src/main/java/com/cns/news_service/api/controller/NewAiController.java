@@ -1,7 +1,7 @@
 package com.cns.news_service.api.controller;
 
-import com.cns.news_service.common.exception.news.NewsErrorCode;
-import com.cns.news_service.common.exception.news.NewsException;
+import com.cns.news_service.common.exception.CustomException;
+import com.cns.news_service.common.exception.ErrorCode;
 import com.cns.news_service.common.response.ApiResponse;
 import com.cns.news_service.dto.request.NewsSummaryRequest;
 
@@ -45,7 +45,7 @@ public class NewAiController {
     public ResponseEntity<ApiResponse> getSummary(@RequestBody NewsSummaryRequest request) {
         NewsSummaryResponse response = newsService.getSummary(request.getLink());
         if (response == null) {
-            throw new NewsException(NewsErrorCode.NEWS_PARSING_ERROR);
+            throw new CustomException(ErrorCode.NEWS_PARSING_ERROR);
         }
         return ResponseEntity.ok(ApiResponse.success(response));
     }
