@@ -3,12 +3,11 @@ package com.cns.news_service.api.controller;
 import com.cns.news_service.common.exception.CustomException;
 import com.cns.news_service.common.exception.ErrorCode;
 import com.cns.news_service.common.response.ApiResponse;
+import com.cns.news_service.common.util.GatewayRequestHeaderUtils;
 import com.cns.news_service.dto.request.NewsSummaryRequest;
 
 import com.cns.news_service.dto.response.NewsResultResponse;
 import com.cns.news_service.dto.response.NewsSummaryResponse;
-import com.cns.news_service.security.PrincipalDetails;
-
 
 import com.cns.news_service.service.NewsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -33,12 +31,11 @@ public class NewAiController {
     @GetMapping({"/ai", "/ai/{start}"})
     public ResponseEntity<ApiResponse> getAiRecommendedNews(
             @Parameter(description = "페이징 시작 인덱스 (선택)", example = "11")
-            @PathVariable(required = false) Integer start,
-            @Parameter(hidden = true)
-            @AuthenticationPrincipal PrincipalDetails principal) {
+            @PathVariable(required = false) Integer start) {
 
-        String prompt = newsService.getKeyword(principal.getId());
-        NewsResultResponse response = newsService.getResponse(prompt, start, principal.getId());
+        Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        String prompt = newsService.getKeyword(userId);
+        NewsResultResponse response = newsService.getResponse(prompt, start, userId);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -51,7 +48,4 @@ public class NewAiController {
         }
         return ResponseEntity.ok(ApiResponse.success(response));
     }
-
-
-
 }
