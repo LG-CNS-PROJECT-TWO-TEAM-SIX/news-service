@@ -1,13 +1,10 @@
-package com.example.demo.service;
+package com.cns.news_service.service;
 
-
-
+import com.cns.news_service.client.UserServiceClinet;
 import com.cns.news_service.common.exception.CustomException;
 import com.cns.news_service.common.exception.ErrorCode;
 import com.cns.news_service.domain.News;
-import com.cns.news_service.dto.response.NewsResponse;
-import com.cns.news_service.dto.response.NewsResultResponse;
-import com.cns.news_service.dto.response.NewsSummaryResponse;
+import com.cns.news_service.dto.response.*;
 import com.cns.news_service.repository.NewsRepository;
 import com.cns.news_service.service.NewsSection;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -55,8 +52,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final OpenAiChatModel openAiChatModel;
     private final ObjectMapper objectMapper;
-    private final FavoriteRepository favoriteRepository;
-    private final UserInterestRepository userInterestRepository;
+    private final UserServiceClinet userServiceClinet;
 
     public List<NewsResponse> getNews(Long userId) {
         List<News> newsList = newsRepository.findAll();
@@ -80,12 +76,11 @@ public class NewsService {
 
     @Transactional
     public String getKeyword(Long userId) {
-        List<String> interests = userInterestRepository.findByUserId(userId).stream()
-                .map(UserInterest::getInterest)
-                .map(Interest::getName)
+        List<String> interests = userServiceClinet.getInterests(userId).stream()
+                .map(InterestResponseDto::getName)
                 .collect(Collectors.toList());
-        List<String> favorites = favoriteRepository.findByUserId(userId).stream()
-                .map(Favorite::getNewsCategory)
+        List<String> favorites = userServiceClinet.getFavorites(userId).stream()
+                .map(FavoriteResponseDto::getNewsCategory)
                 .toList();
         List<News> newsList = newsRepository.findAll();
 
@@ -416,10 +411,10 @@ public class NewsService {
 
     @Transactional
     public List<String> getUserFavorite(Long userId) {
-        List<Favorite> list = favoriteRepository.findByUserId(userId);
+        List<FavoriteResponseDto> list = userServiceClinet.getFavorites(userId);
         if (list.isEmpty()) return null;
         return list.stream()
-                .map(Favorite::getNewsLink)
+                .map(FavoriteResponseDto::getNewsLink)
                 .collect(Collectors.toList());
     }
 
