@@ -25,7 +25,10 @@ public enum ErrorCode {
     NO_INTEREST_SELECTED(BAD_REQUEST,"관심사를 하나도 선택하지 않았습니다.","40001"),
     INTEREST_NOT_FOUND(NOT_FOUND,"관심사를 찾을 수 없습니다.","40403"),
     INTEREST_NOT_FOUND_FOR_USER(NOT_FOUND,"사용자에게 등록된 관심사가 없습니다.","40404"),
-    INVALID_PASSWORD(BAD_REQUEST,"올바르지 못한 비밀번호입니다." , "400")
+    INVALID_PASSWORD(BAD_REQUEST,"올바르지 못한 비밀번호입니다." , "400"),
+
+    MISSING_CLIENT_DEVICE(BAD_REQUEST, "헤더에 사용자 디바이스 정보가 없습니다.", "40010"),
+    MISSING_CLIENT_ADDRESS(BAD_REQUEST, "헤더에 사용자 IP 주소 정보가 없습니다.", "40011"),
     ;
 
 
@@ -63,6 +66,13 @@ public enum ErrorCode {
     }
     public static CustomException interestNotFoundForUser(){
         return new CustomException(INTEREST_NOT_FOUND_FOR_USER);
+    }
+    public static CustomException missingClientDevice() {
+        return new CustomException(MISSING_CLIENT_DEVICE);
+    }
+
+    public static CustomException missingClientAddress() {
+        return new CustomException(MISSING_CLIENT_ADDRESS);
     }
 
 }
