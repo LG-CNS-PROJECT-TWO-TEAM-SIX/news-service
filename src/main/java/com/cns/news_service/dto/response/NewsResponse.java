@@ -1,6 +1,7 @@
 package com.cns.news_service.dto.response;
 
-import com.example.demo.domain.News;
+
+import com.cns.news_service.domain.News;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
