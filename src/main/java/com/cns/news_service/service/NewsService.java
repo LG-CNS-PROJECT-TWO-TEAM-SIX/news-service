@@ -1,9 +1,8 @@
 package com.cns.news_service.service;
 
-import com.cns.news_service.client.UserServiceClinet;
+import com.cns.news_service.client.UserServiceClient;
 import com.cns.news_service.common.exception.CustomException;
 import com.cns.news_service.common.exception.ErrorCode;
-import com.cns.news_service.common.util.GatewayRequestHeaderUtils;
 import com.cns.news_service.domain.News;
 import com.cns.news_service.dto.response.*;
 import com.cns.news_service.repository.NewsRepository;
@@ -50,7 +49,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final OpenAiChatModel openAiChatModel;
     private final ObjectMapper objectMapper;
-    private final UserServiceClinet userServiceClinet;
+    private final UserServiceClient userServiceClient;
 
     public List<NewsResponse> getNews(Long userId) {
         List<News> newsList = newsRepository.findAll();
@@ -74,10 +73,10 @@ public class NewsService {
 
     @Transactional
     public String getKeyword(Long userId) {
-        List<String> interests = userServiceClinet.getInterests(userId).stream()
+        List<String> interests = userServiceClient.getInterests(userId).stream()
                 .map(InterestResponseDto::getName)
                 .collect(Collectors.toList());
-        List<String> favorites = userServiceClinet.getFavorites(userId).stream()
+        List<String> favorites = userServiceClient.getFavorites(userId).stream()
                 .map(FavoriteResponseDto::getNewsCategory)
                 .toList();
         List<News> newsList = newsRepository.findAll();
@@ -409,7 +408,7 @@ public class NewsService {
 
     @Transactional
     public List<String> getUserFavorite(Long userId) {
-        List<FavoriteResponseDto> list = userServiceClinet.getFavorites(userId);
+        List<FavoriteResponseDto> list = userServiceClient.getFavorites(userId);
         if (list.isEmpty()) return null;
         return list.stream()
                 .map(FavoriteResponseDto::getNewsLink)
