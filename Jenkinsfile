@@ -105,24 +105,24 @@ pipeline {
         }
     }
     post {
-                success {
-                    echo '✅ 빌드 성공!'
-                    sh """
-                        curl -H "Content-Type: application/json" \
-                             -X POST \
-                             -d '{"content": "✅ [빌드 성공]\n- 프로젝트: ${APP_NAME}\n- 태그: ${params.TAG}\n- 이미지: ${DOCKER_IMAGE_NAME}"}' \
-                             $DISCORD_WEBHOOK
-                    """
-                }
+            success {
+                echo '✅ 빌드 성공!'
+                sh """
+                    curl -H "Content-Type: application/json" \\
+                         -X POST \\
+                         -d '{"content": "✅ [빌드 성공]\\n- 프로젝트: ${APP_NAME}\\n- 태그: ${params.TAG}\\n- 이미지: ${DOCKER_IMAGE_NAME}"}' \\
+                         ${DISCORD_WEBHOOK}
+                """
+            }
 
-                failure {
-                    echo '❌ 빌드 실패...'
-                    sh """
-                        curl -H "Content-Type: application/json" \
-                             -X POST \
-                             -d '{"content": "❌ [빌드 실패]\n- 프로젝트: ${APP_NAME}\n- 태그: ${params.TAG}"}' \
-                             $DISCORD_WEBHOOK
-                    """
-                }
+            failure {
+                echo '❌ 빌드 실패...'
+                sh """
+                    curl -H "Content-Type: application/json" \\
+                         -X POST \\
+                         -d '{"content": "❌ [빌드 실패]\\n- 프로젝트: ${APP_NAME}\\n- 태그: ${params.TAG}"}' \\
+                         ${DISCORD_WEBHOOK}
+                """
+            }
     }
 }
