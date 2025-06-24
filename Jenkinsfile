@@ -32,6 +32,7 @@ pipeline {
         DOCKER_REGISTRY = "parangg"
         DOCKERHUB_CREDENTIAL = 'dockerhub-token'
         DISCORD_WEBHOOK = credentials('discord')
+    }
 
     options {
         disableConcurrentBuilds()
