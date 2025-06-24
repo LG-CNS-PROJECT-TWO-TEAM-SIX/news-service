@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/news")
+@RequestMapping("/api/news")
 @RequiredArgsConstructor
 @Tag(name = "AI 뉴스 API", description = "사용자 관심사 기반 뉴스 추천 및 AI 요약 기능 제공")
 public class NewAiController {

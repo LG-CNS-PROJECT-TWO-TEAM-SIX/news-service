@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/news")
+@RequestMapping(value = "api/news")
 @Tag(name = "뉴스 조회 API")
 public class NewsQueryController {
 
