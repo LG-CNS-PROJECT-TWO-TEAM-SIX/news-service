@@ -14,6 +14,6 @@ metadata:
   name: news-mysql-service
 subsets:
   - addresses:
-      - ip: 192.168.0.14
+      - ip: 192.168.0.14 #각자의 ip
     ports:
       - port: 13308
