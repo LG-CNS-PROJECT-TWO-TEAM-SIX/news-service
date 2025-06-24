@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient("User-Service")
+@FeignClient(name = "backend-user-service")
 public interface UserServiceClient {
     @GetMapping("/favorites/{userId}")
     List<FavoriteResponseDto> getFavorites(@PathVariable("userId") Long userId);
