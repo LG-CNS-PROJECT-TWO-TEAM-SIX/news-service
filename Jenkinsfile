@@ -31,8 +31,7 @@ pipeline {
         ARTIFACTS = "build/libs/**"
         DOCKER_REGISTRY = "parangg"
         DOCKERHUB_CREDENTIAL = 'dockerhub-token'
-        DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1386572756358791168/sAQu_esRsWKDccimDKVALESFvyMvRW-KaiLYERTnAYtfwEh24ZCY_aazvIFf14wh81bP"
-    }
+        DISCORD_WEBHOOK = credentials('discord')
 
     options {
         disableConcurrentBuilds()
