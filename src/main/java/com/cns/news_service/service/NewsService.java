@@ -313,6 +313,62 @@ public class NewsService {
         }
     }
 
+    @Transactional
+    public void pushNewsHeadline() {
+        try {
+            LocalDateTime batchTime = LocalDateTime.now();
+            log.info("[News Headline 수동 push Start]  time : {} ", batchTime);
+            List<NewsSection> sections = List.of(
+                    new NewsSection("https://news.naver.com/section/100", "정치"),
+                    new NewsSection("https://news.naver.com/section/101", "경제"),
+                    new NewsSection("https://news.naver.com/section/102", "사회"),
+                    new NewsSection("https://news.naver.com/section/103", "생활/문화"),
+                    new NewsSection("https://news.naver.com/section/104", "세계"),
+                    new NewsSection("https://news.naver.com/section/105", "IT/과학")
+            );
+
+            List<News> newsList = new ArrayList<>();
+
+            for (NewsSection section : sections) {
+                Document doc = Jsoup.connect(section.url()).get();
+                Elements newsLists = doc.select("ul[id^=_SECTION_HEADLINE_LIST_]");
+
+                for (Element newsListElem : newsLists) {
+                    Elements items = newsListElem.select("li");
+                    for (Element item : items) {
+                        Element linkElem = item.selectFirst("a.sa_text_title");
+                        if (linkElem == null) continue;
+
+                        String title = linkElem.text();
+                        String link = linkElem.attr("href");
+
+                        Element thumbnailContainer = item.selectFirst("a.sa_thumb_link img");
+                        String thumbnail = thumbnailContainer != null ? thumbnailContainer.attr("data-src") : "";
+
+                        Element summaryElem = item.selectFirst("div.sa_text_lede");
+                        String summary = summaryElem != null ? summaryElem.text() : "";
+
+                        newsList.add(News.builder()
+                                .title(title)
+                                .link(link)
+                                .description(summary)
+                                .thumbnail(thumbnail)
+                                .category(section.name())
+                                .createdTime(batchTime)
+                                .build());
+                    }
+                }
+            }
+            newsRepository.saveAll(newsList);
+            newsRepository.deleteByCreatedTimeBefore(batchTime);
+            log.info("[News Headline 수동 push End]");
+        } catch (Exception e) {
+            log.error("[News Service] pushNewsHeadline");
+            throw new CustomException(ErrorCode.NEWS_PARSING_ERROR);
+        }
+
+    }
+
     public String naverSearchApi(String query, Integer display, Integer start) {
         if (display == null) display = 100;
         if (start == null) start = 1;
