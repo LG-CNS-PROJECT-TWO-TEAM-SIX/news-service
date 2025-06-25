@@ -450,8 +450,11 @@ public class NewsService {
         try {
             Document doc = Jsoup.connect(link).get();
             Elements article;
-            if(link.contains("https://n.news.naver.com") || link.contains("https://news.naver.com")) article = doc.select("article[id^=dic_area]");
+            if(link.contains("https://n.news.naver.com") || link.contains("https://news.naver.com")) {
+                article = doc.select("article[id^=dic_area]");
+            } else {
             article = doc.select("div[class=_article_content]");
+            }
             if (!article.isEmpty()) {
                 // 불필요한 태그 제거
                 article.select("strong, span, div, em, img, script, style, br").remove();
