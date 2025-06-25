@@ -36,7 +36,7 @@ dependencies {
 
 	// open feign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j:8.4.0'
