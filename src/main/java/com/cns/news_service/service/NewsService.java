@@ -14,7 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -47,7 +47,7 @@ public class NewsService {
     private final static int TOTAL_ITEM_SIZE = 10;
 
     private final NewsRepository newsRepository;
-    private final OpenAiChatModel openAiChatModel;
+    private final ChatModel chatModel;
     private final ObjectMapper objectMapper;
     private final UserServiceClient userServiceClient;
 
@@ -87,7 +87,7 @@ public class NewsService {
                 .map(news -> news.getTitle() + " (" + news.getCategory() + ")")
                 .collect(Collectors.joining("\n- ", "- ", ""));
 
-        return openAiChatModel.call(
+        return chatModel.call(
                 """
                         사용자의 관심사는 다음과 같습니다:
                         %s
@@ -383,7 +383,7 @@ public class NewsService {
                 // 텍스트 추출 (줄바꿈 없이)
                 String plainText = article.text();
 
-                String response = openAiChatModel.call("""
+                String response = chatModel.call("""
                         아래는 뉴스 기사 본문입니다:
                         ---
                         %s
