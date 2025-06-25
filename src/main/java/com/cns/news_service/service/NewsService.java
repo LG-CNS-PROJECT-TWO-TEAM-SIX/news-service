@@ -105,7 +105,7 @@ public class NewsService {
                         - 추천된 검색어는 공백으로 구분된 5개의 단어로만 출력해주세요 (쉼표 없이).
                         """.formatted(interestStr, favoriteStr, titles);
         String result = chatModel.call(prompt);
-        log.info("AI 키워드 : ", result);
+        log.info("AI 키워드 : {}", result);
         return result;
 //        return chatModel.call(
 //                """
